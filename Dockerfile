@@ -1,23 +1,13 @@
-FROM eclipse-temurin:21-jdk as build
+FROM maven:3.9-eclipse-temurin-21 as build
 
 WORKDIR /app
 
-# Copy maven executable and pom.xml
-COPY mvnw .
-COPY .mvn .mvn
+# Copy pom.xml and source code
 COPY pom.xml .
-
-# Make the maven wrapper executable
-RUN chmod +x ./mvnw
-
-# Download all required dependencies
-RUN ./mvnw dependency:go-offline -B
-
-# Copy source code
 COPY src src
 
 # Build the application
-RUN ./mvnw package -DskipTests
+RUN mvn package -DskipTests
 
 # Second stage: runtime
 FROM eclipse-temurin:21-jre
@@ -29,6 +19,7 @@ COPY --from=build /app/target/*.jar app.jar
 
 # Expose the port
 EXPOSE 8080
+EXPOSE 5432
 
 # Set entry point
 ENTRYPOINT ["java", "-jar", "app.jar"]
