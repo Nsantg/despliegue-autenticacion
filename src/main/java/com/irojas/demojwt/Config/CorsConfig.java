@@ -18,7 +18,7 @@ public class CorsConfig {
         config.setAllowCredentials(true);
 
         // Orígenes permitidos - ajusta según tu entorno
-        config.addAllowedOrigin("http://localhost:3000/"); // Frontend URL
+        config.addAllowedOrigin("http://localhost:3000"); // Frontend URL
 
         // Cabeceras permitidas
         config.addAllowedHeader("*");
